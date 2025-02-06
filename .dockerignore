@@ -1,0 +1,30 @@
+# Ignore build output directories
+**/bin
+**/obj
+
+# Ignore user-specific files
+**/*.user
+**/*.suo
+**/*.userosscache
+**/*.sln.docstates
+
+# Ignore Rider project files
+.idea/
+
+# Ignore Visual Studio Code workspace settings
+.vscode/
+
+# Ignore Visual Studio folder settings
+.vs/
+
+# Ignore logs
+logs
+*.log
+
+# Ignore temporary files
+*.tmp
+*.temp
+
+# Ignore publish output
+**/publish
+**/out
