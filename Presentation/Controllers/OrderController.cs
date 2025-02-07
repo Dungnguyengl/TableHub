@@ -19,6 +19,7 @@ namespace Presentation.Controllers
         public async Task<PaggingResultDto<SearchOrderDto>> SearchOrderItem([FromQuery] SearchOrderQuery query)
         {
             var orders = await _context.Orders.AsNoTracking()
+                .TakeByStore(User)
                 .TakeAvailable()
                 .Pagging(query, out var total)
                 .ToListAsync();
@@ -50,7 +51,7 @@ namespace Presentation.Controllers
                 Total = total,
                 PageSize = query.PageSize,
                 Sequence = query.Sequence,
-                Results = result
+                Results = result.ToList()
             };
         }
 

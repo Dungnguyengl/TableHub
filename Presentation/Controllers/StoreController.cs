@@ -50,7 +50,7 @@ namespace Presentation.Controllers
                 Total = total,
                 PageSize = query.PageSize,
                 Sequence = query.Sequence,
-                Results = result
+                Results = result.ToList(),
             };
         }
 

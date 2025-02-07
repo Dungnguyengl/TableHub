@@ -2,7 +2,7 @@
 {
     public enum TableStatus
     {
-        Avilable,
+        Available,
         Busy,
         Ordered
     }

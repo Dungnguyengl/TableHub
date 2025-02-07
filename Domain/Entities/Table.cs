@@ -1,4 +1,5 @@
-﻿using Core.Enum;
+﻿using Core.Entities;
+using Core.Enum;
 
 namespace Domain.Entities
 {

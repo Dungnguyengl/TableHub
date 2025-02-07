@@ -1,5 +1,6 @@
 ﻿using Core.CoreDtos;
 using Core.Entities;
+using System.Security.Claims;
 
 namespace Core.Extentions
 {
@@ -15,6 +16,16 @@ namespace Core.Extentions
         public static IQueryable<TEntity> TakeAvailable<TEntity>(this IQueryable<TEntity> query) where TEntity : EntityBase
         {
             return query.Where(q => !q.IsDelete);
+        }
+
+        public static IQueryable<TEntity> TakeByStore<TEntity>(this IQueryable<TEntity> query, ClaimsPrincipal userClaim) where TEntity : StoreEntityBase
+        {
+            var storeId = userClaim.FindFirstValue("StoreId");
+            if (storeId != null)
+            {
+                query = query.Where(x => x.StoreId == Guid.Parse(storeId));
+            }
+            return query;
         }
     }
 }

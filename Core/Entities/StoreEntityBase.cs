@@ -1,6 +1,4 @@
-﻿using Core.Entities;
-
-namespace Domain.Entities
+﻿namespace Core.Entities
 {
     public class StoreEntityBase : EntityBase
     {
