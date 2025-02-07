@@ -2,6 +2,7 @@
 using Core.CoreDtos;
 using Core.Extentions;
 using Infrastructure.Database;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,7 @@ namespace Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TableController(TableHubDbContext context) : ControllerBase
     {
         private readonly TableHubDbContext _context = context;

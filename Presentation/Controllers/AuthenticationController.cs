@@ -2,6 +2,7 @@
 using Core.Enum;
 using Domain.Constants;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -13,6 +14,7 @@ namespace Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class AuthenticationController(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration) : ControllerBase
     {
         private readonly UserManager<User> _userManager = userManager;
