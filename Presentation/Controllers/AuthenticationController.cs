@@ -33,7 +33,7 @@ namespace Presentation.Controllers
             if (result.Succeeded)
             {
                 var accessToken = GenerateJwtToken(user);
-                return Ok(new LoginDto { AccessToken = accessToken });
+                return Ok(new LoginDto { AccessToken = accessToken, Role = user.Role });
             }
             return NotFound();
         }
