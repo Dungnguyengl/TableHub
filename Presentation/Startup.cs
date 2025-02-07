@@ -51,6 +51,24 @@ namespace Presentation
                 };
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Cors", builder =>
+                {
+                    builder.AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials()
+                        .SetIsOriginAllowed(x =>
+                        {
+                            var cors = Configuration ["AllowedHosts"]?.Split(',');
+                            if (cors == null || cors [0] == "*" || cors.Contains(x))
+                            {
+                                return true;
+                            }
+                            return false;
+                        });
+                });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -60,6 +78,8 @@ namespace Presentation
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseCors("Cors");
 
             app.UseAuthentication();
 

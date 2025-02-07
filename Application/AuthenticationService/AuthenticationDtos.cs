@@ -23,5 +23,6 @@ namespace Application.AuthenticationService
         public string LastName { get; set; }
         public Gender Gender { get; set; }
         public DateOnly Dob { get; set; }
+        public bool IsOwner { get; set; }   
     }
 }

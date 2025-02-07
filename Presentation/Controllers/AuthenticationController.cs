@@ -48,7 +48,7 @@ namespace Presentation.Controllers
                 LastName = command.LastName,
                 Dob = command.Dob,
                 Gender = command.Gender == Gender.Male ? Genders.MALE : Genders.FEMALE,
-                Role = Roles.GUEST,
+                Role = command.IsOwner ? Roles.STAFF : Roles.GUEST,
             };
 
             var registerUser = await _userManager.CreateAsync(user, command.Password);
