@@ -56,17 +56,16 @@ namespace Presentation
                 options.AddPolicy("Cors", builder =>
                 {
                     builder.AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .AllowCredentials()
-                        .SetIsOriginAllowed(x =>
-                        {
-                            var cors = Configuration ["AllowedHosts"]?.Split(',');
-                            if (cors == null || cors [0] == "*" || cors.Contains(x))
-                            {
-                                return true;
-                            }
-                            return false;
-                        });
+                        .AllowAnyHeader();
+                    var cors = Configuration ["AllowedHosts"]?.Split(',');
+                    if (cors == null || cors [0] == "*")
+                    {
+                        builder.AllowAnyOrigin();
+                    }
+                    else
+                    {
+                        builder.WithOrigins(cors);
+                    }
                 });
             });
         }
