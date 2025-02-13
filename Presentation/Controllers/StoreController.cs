@@ -1,5 +1,6 @@
 ﻿using Application.StoreService;
 using Core.CoreDtos;
+using Core.Enum;
 using Core.Extentions;
 using Infrastructure.Database;
 using Microsoft.AspNetCore.Authorization;
@@ -29,6 +30,7 @@ namespace Presentation.Controllers
             var tables = await _context.Tables.AsNoTracking()
                 .TakeAvailable()
                 .Where(x => x.StoreId.HasValue && storeIds.Contains(x.StoreId.Value))
+                .Where(x => x.Status == TableStatus.Available)
                 .ToListAsync();
 
             var tableQuantities = tables.GroupBy(x => x.StoreId)
@@ -42,7 +44,8 @@ namespace Presentation.Controllers
             {
                 Name = x.Name,
                 Address = x.Address,
-                AvailableTableQuantity = tableQuantities.FirstOrDefault(q => q.StoreId == x.Key)?.Quantity ?? 0
+                AvailableTableQuantity = tableQuantities.FirstOrDefault(q => q.StoreId == x.Key)?.Quantity ?? 0,
+                LogoLink = x.LogoLink,
             });
 
             return new PaggingResultDto<SearchStoreDto>
