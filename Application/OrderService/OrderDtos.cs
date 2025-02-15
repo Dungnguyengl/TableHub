@@ -5,6 +5,7 @@ namespace Application.OrderService
 {
     public class SearchOrderQuery : PaggingDto
     {
+        public Guid? StoreId { get; set; }
     }
 
     public class SearchOrderDto

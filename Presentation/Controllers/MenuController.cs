@@ -20,6 +20,7 @@ namespace Presentation.Controllers
         {
             var result = await _context.Products.AsNoTracking()
                 .TakeAvailable()
+                .TakeByStore(User, query.StoreId)
                 .Pagging(query, out var total)
                 .Select(x => new SearchMenuDto
                 {

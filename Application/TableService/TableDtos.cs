@@ -5,7 +5,9 @@ namespace Application.TableService
 {
     public class SearchTableQuery : PaggingDto
     {
+        public Guid? StoreId { get; set; }
     }
+
 
     public class SearchTableDto
     {

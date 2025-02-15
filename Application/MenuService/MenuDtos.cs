@@ -4,6 +4,7 @@ namespace Application.MenuService
 {
     public class SearchMenuQuery : PaggingDto
     {
+        public Guid? StoreId { get; set; }
     }
 
     public class SearchMenuDto

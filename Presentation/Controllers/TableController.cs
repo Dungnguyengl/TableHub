@@ -19,7 +19,7 @@ namespace Presentation.Controllers
         public async Task<PaggingResultDto<SearchTableDto>> SearchTable([FromQuery] SearchTableQuery query)
         {
             var result = await _context.Tables.AsNoTracking()
-                .TakeByStore(User)
+                .TakeByStore(User, query.StoreId)
                 .TakeAvailable()
                 .Pagging(query, out var total)
                 .Select(x => new SearchTableDto

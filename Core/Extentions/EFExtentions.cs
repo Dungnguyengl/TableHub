@@ -18,12 +18,14 @@ namespace Core.Extentions
             return query.Where(q => !q.IsDelete);
         }
 
-        public static IQueryable<TEntity> TakeByStore<TEntity>(this IQueryable<TEntity> query, ClaimsPrincipal userClaim) where TEntity : StoreEntityBase
+        public static IQueryable<TEntity> TakeByStore<TEntity>(this IQueryable<TEntity> query, ClaimsPrincipal userClaim, Guid? storeId = null) where TEntity : StoreEntityBase
         {
-            var storeId = userClaim.FindFirstValue("StoreId");
+            var claim = userClaim.FindFirstValue("StoreId");
+            if (!claim.IsNullOrEmpty())
+                storeId ??= Guid.Parse(claim);
             if (storeId != null)
             {
-                query = query.Where(x => x.StoreId == Guid.Parse(storeId));
+                query = query.Where(x => x.StoreId == storeId);
             }
             return query;
         }
