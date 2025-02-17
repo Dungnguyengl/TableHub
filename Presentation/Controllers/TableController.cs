@@ -1,6 +1,7 @@
 ﻿using Application.TableService;
 using Core.CoreDtos;
 using Core.Extentions;
+using Domain.Constants;
 using Infrastructure.Database;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,7 @@ namespace Presentation.Controllers
                 .Pagging(query, out var total)
                 .Select(x => new SearchTableDto
                 {
+                    TableId = x.Key,
                     TableName = x.Name,
                     Status = x.Status
                 })
@@ -48,6 +50,27 @@ namespace Presentation.Controllers
         public Task<UpdateTableDto> Update([FromBody] UpdateTableCommand command)
         {
             throw new NotImplementedException();
+        }
+
+        [HttpPut("change-status")]
+        [Authorize(Roles = Roles.STAFF)]
+        public async Task<CommandDto> ChangeStatus([FromBody] ChangeStatusCommand command)
+        {
+            var table = await _context.Tables
+                .TakeByStore(User)
+                .TakeAvailable()
+                .FirstOrDefaultAsync(x => x.Key == command.TableId);
+
+            if (table == null)
+            {
+                return CommandDto.NotFound("Table", command.TableId?.ToString());
+            }
+
+            table.Status = command.Status ?? table.Status;
+            _context.Tables.Update(table, User);
+            await _context.SaveChangesAsync();
+
+            return CommandDto.Success();
         }
 
         [HttpDelete]

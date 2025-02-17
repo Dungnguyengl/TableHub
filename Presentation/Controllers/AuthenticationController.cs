@@ -69,6 +69,7 @@ namespace Presentation.Controllers
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Sid, user.Id),
                 new Claim(ClaimTypes.Role, user.Role),
                 new Claim("StoreId", user.StoreId.ToString())
             };

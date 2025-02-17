@@ -2,9 +2,9 @@
 {
     public static class Roles
     {
-        public static readonly string ADMIN = "Admin";
-        public static readonly string STAFF = "Staff";
-        public static readonly string GUEST = "Guest";
-        public static readonly string UNKNOW = "Unknow_User";
+        public const string ADMIN = "Admin";
+        public const string STAFF = "Staff";
+        public const string GUEST = "Guest";
+        public const string UNKNOW = "Unknow_User";
     }
 }

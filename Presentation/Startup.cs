@@ -56,7 +56,7 @@ namespace Presentation
                 options.AddPolicy("Cors", builder =>
                 {
                     builder.AllowAnyMethod()
-                        .AllowAnyHeader();
+                           .AllowAnyHeader();
                     var cors = Configuration ["AllowedHosts"]?.Split(',');
                     if (cors == null || cors [0] == "*")
                     {
@@ -78,13 +78,14 @@ namespace Presentation
                 app.UseSwaggerUI();
             }
 
-            app.UseCors("Cors");
 
             app.UseAuthentication();
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            
+            app.UseCors("Cors");
 
             app.UseAuthorization();
 

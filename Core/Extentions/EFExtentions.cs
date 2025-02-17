@@ -1,5 +1,6 @@
 ﻿using Core.CoreDtos;
 using Core.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace Core.Extentions

@@ -11,6 +11,7 @@ namespace Application.TableService
 
     public class SearchTableDto
     {
+        public Guid? TableId { get; set; }
         public string? TableName { get; set; }
         public TableStatus? Status { get; set; }
     }
@@ -31,6 +32,17 @@ namespace Application.TableService
     }
 
     public class UpdateTableDto
+    {
+
+    }
+
+    public class ChangeStatusCommand
+    {
+        public Guid? TableId { get; set; }
+        public TableStatus? Status { get; set; }
+    }
+
+    public class ChangeStatusDto
     {
 
     }
