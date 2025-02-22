@@ -24,10 +24,7 @@ namespace Core.Extentions
             var claim = userClaim.FindFirstValue("StoreId");
             if (!claim.IsNullOrEmpty())
                 storeId ??= Guid.Parse(claim);
-            if (storeId != null)
-            {
-                query = query.Where(x => x.StoreId == storeId);
-            }
+            query = query.Where(x => x.StoreId == storeId);
             return query;
         }
     }
