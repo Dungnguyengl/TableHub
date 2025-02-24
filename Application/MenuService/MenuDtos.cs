@@ -9,6 +9,7 @@ namespace Application.MenuService
 
     public class SearchMenuDto
     {
+        public Guid? ProductId { get; set; }
         public string? Name { get; set; }
         public string? LogoLink { get; set; }
         public decimal? Price { get; set; }

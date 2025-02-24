@@ -24,6 +24,7 @@ namespace Presentation.Controllers
                 .Pagging(query, out var total)
                 .Select(x => new SearchMenuDto
                 {
+                    ProductId = x.Key,
                     Name = x.Name,
                     Price = x.Price,
                     LogoLink = x.ImageLink
