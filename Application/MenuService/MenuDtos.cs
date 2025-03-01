@@ -15,28 +15,21 @@ namespace Application.MenuService
         public decimal? Price { get; set; }
     }
 
-    public class CreateMenuCommand
+    public class AddProductCommand
     {
-
+        public string? Name { get; set; }
+        public decimal? Price { get; set; }
     }
 
-    public class CreateMenuDto
+    public class UpdateProductCommand
     {
-
+        public Guid? ProductId { get; set; }
+        public string? Name { get; set; }
+        public decimal? Price { get; set; }
     }
 
-    public class UpdateMenuCommand
+    public class DeleteProductCommand
     {
-
-    }
-
-    public class UpdateMenuDto
-    {
-
-    }
-
-    public class DeleteMenuCommand
-    {
-
+        public Guid? ProductId { get; set; }
     }
 }

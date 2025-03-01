@@ -5,7 +5,7 @@ namespace Core.CoreDtos
 {
     public class CommandDto
     {
-        public string Status { get; set; }
+        public CommandStatus Status { get; set; }
         public string Message { get; set; } = string.Empty;
 
         public static CommandDto NotFound<TEntity>(string? key = "") where TEntity : class
@@ -17,7 +17,7 @@ namespace Core.CoreDtos
         {
             return new CommandDto
             {
-                Status = CommandStatus.NotFound.GetDescription(),
+                Status = CommandStatus.NotFound,
                 Message = (entityName.IsNullOrEmpty() || key.IsNullOrEmpty()) ? "Not Found" : $"{entityName} has Key: {key} not found"
             };
         }
@@ -26,7 +26,7 @@ namespace Core.CoreDtos
         {
             return new CommandDto
             {
-                Status = CommandStatus.Success.GetDescription()
+                Status = CommandStatus.Success
             };
         }
     }
