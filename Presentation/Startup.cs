@@ -1,4 +1,5 @@
 ﻿using Core.Services.FileService;
+using Core.Services.UserService;
 using Domain.Entities;
 using Infrastructure.Database;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -28,6 +29,7 @@ namespace Presentation
             services.AddSwaggerGen();
 
             services.AddScoped<IImageStorageService, CloudinaryService>();
+            services.AddScoped<IUserService, UserService>();
 
             services.AddDbContext<TableHubDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));

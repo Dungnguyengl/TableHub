@@ -26,6 +26,6 @@ namespace Application.AuthenticationService
         public Gender Gender { get; set; }
         public DateOnly Dob { get; set; }
         public bool IsOwner { get; set; }
-        public RegisterStoreCommand StoreInfo { get; set; }
+        public RegisterStoreCommand? StoreInfo { get; set; }
     }
 }
