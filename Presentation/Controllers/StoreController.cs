@@ -42,6 +42,7 @@ namespace Presentation.Controllers
 
             var result = store.Select(x => new SearchStoreDto
             {
+                StoreId = x.Key,
                 Name = x.Name,
                 Address = x.Address,
                 AvailableTableQuantity = tableQuantities.FirstOrDefault(q => q.StoreId == x.Key)?.Quantity ?? 0,

@@ -1,4 +1,5 @@
-﻿using Core.Enum;
+﻿using Application.StoreService;
+using Core.Enum;
 
 namespace Application.AuthenticationService
 {
@@ -24,6 +25,7 @@ namespace Application.AuthenticationService
         public string LastName { get; set; }
         public Gender Gender { get; set; }
         public DateOnly Dob { get; set; }
-        public bool IsOwner { get; set; }   
+        public bool IsOwner { get; set; }
+        public RegisterStoreCommand StoreInfo { get; set; }
     }
 }

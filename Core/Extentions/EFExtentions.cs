@@ -19,6 +19,12 @@ namespace Core.Extentions
             return query.Where(q => !q.IsDelete);
         }
 
+        public static IQueryable<TEntity> TakeAvailable<TEntity>(this DbSet<TEntity> query) where TEntity : EntityBase
+        {
+            return query.AsNoTracking()
+                .Where(q => !q.IsDelete);
+        }
+
         public static IQueryable<TEntity> TakeByStore<TEntity>(this IQueryable<TEntity> query, ClaimsPrincipal userClaim, Guid? storeId = null) where TEntity : StoreEntityBase
         {
             var claim = userClaim.FindFirstValue("StoreId");

@@ -1,7 +1,10 @@
 ﻿using Application.AuthenticationService;
 using Core.Enum;
+using Core.Extentions;
+using Core.Services.FileService;
 using Domain.Constants;
 using Domain.Entities;
+using Infrastructure.Database;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,10 +18,12 @@ namespace Presentation.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class AuthenticationController(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration) : ControllerBase
+    public class AuthenticationController(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration, TableHubDbContext context, IImageStorageService imageStorageService) : ControllerBase
     {
         private readonly UserManager<User> _userManager = userManager;
         private readonly SignInManager<User> _signInManager = signInManager;
+        private readonly TableHubDbContext _context = context;
+        private readonly IImageStorageService _imageStorageService = imageStorageService;
         private readonly IConfiguration Configuration = configuration;
 
         [HttpPost("login")]
@@ -38,26 +43,56 @@ namespace Presentation.Controllers
             return NotFound();
         }
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterCommand command)
+        public async Task<IActionResult> Register([FromForm] RegisterCommand command)
         {
-            var user = new User
-            {
-                Email = command.Email,
-                UserName = command.Email,
-                FirstName = command.FirstName,
-                LastName = command.LastName,
-                Dob = command.Dob,
-                Gender = command.Gender == Gender.Male ? Genders.MALE : Genders.FEMALE,
-                Role = command.IsOwner ? Roles.STAFF : Roles.GUEST,
-            };
+            using var transaction = await _context.Database.BeginTransactionAsync();
 
-            var registerUser = await _userManager.CreateAsync(user, command.Password);
-
-            if (!registerUser.Succeeded)
+            try
             {
-                return BadRequest(registerUser.Errors);
+                var user = new User
+                {
+                    Email = command.Email,
+                    UserName = command.Email,
+                    FirstName = command.FirstName,
+                    LastName = command.LastName,
+                    Dob = command.Dob,
+                    Gender = command.Gender == Gender.Male ? Genders.MALE : Genders.FEMALE,
+                    Role = command.IsOwner ? Roles.STAFF : Roles.GUEST,
+                };
+                var registerUser = await _userManager.CreateAsync(user, command.Password);
+                if (!registerUser.Succeeded)
+                {
+                    await transaction.RollbackAsync();
+                    return BadRequest(registerUser.Errors);
+                }
+
+
+                if (command.IsOwner)
+                {
+                    var storeInfo = command.StoreInfo;
+                    var store = new Store
+                    {
+                        Name = storeInfo.Name,
+                        Address = storeInfo.Address,
+                        LogoLink = await _imageStorageService.StoreFileAsync(storeInfo.LogoImage)
+                    };
+
+                    var u = await _userManager.FindByEmailAsync(command.Email);
+                    var storeId = _context.Stores.CreateWithTracking(store, u?.Id);
+
+                    user.StoreId = storeId;
+
+                    await _userManager.UpdateAsync(user);
+                    await _context.SaveChangesAsync();
+                }
+                await transaction.CommitAsync();
+                return Ok();
             }
-            return Ok();
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
 
         private string GenerateJwtToken(User user)
