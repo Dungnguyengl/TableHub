@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Core.Services.FileService;
+using Domain.Entities;
 using Infrastructure.Database;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -20,9 +21,13 @@ namespace Presentation
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddHttpContextAccessor();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
+
+            services.AddScoped<IImageStorageService, CloudinaryService>();
 
             services.AddDbContext<TableHubDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -68,6 +73,8 @@ namespace Presentation
                     }
                 });
             });
+
+            services.AddPayOS(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -78,6 +85,9 @@ namespace Presentation
                 app.UseSwaggerUI();
             }
 
+            app.UsePayOS();
+
+            app.ApplyMigrations();
 
             app.UseAuthentication();
 

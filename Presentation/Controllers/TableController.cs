@@ -67,7 +67,7 @@ namespace Presentation.Controllers
             }
 
             table.Status = command.Status ?? table.Status;
-            _context.Tables.Update(table, User);
+            _context.Tables.UpdateWithTracking(table);
             await _context.SaveChangesAsync();
 
             return CommandDto.Success();

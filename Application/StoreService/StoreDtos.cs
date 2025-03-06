@@ -1,5 +1,5 @@
 ﻿using Core.CoreDtos;
-using Core.Enum;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.StoreService
 {
@@ -9,10 +9,18 @@ namespace Application.StoreService
 
     public class SearchStoreDto
     {
+        public Guid? StoreId { get; set; }
         public string? Name { get; set; }
         public string? Address { get; set; }
         public int? AvailableTableQuantity { get; set; }
         public string? LogoLink { get; set; }
+    }
+
+    public class RegisterStoreCommand
+    {
+        public string? Name { get; set; }
+        public string? Address { get; set; }
+        public IFormFile LogoImage { get; set; }
     }
 
     public class CreateStoreCommand

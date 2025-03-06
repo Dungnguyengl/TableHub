@@ -41,19 +41,19 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
-        public Task<CreateMenuDto> Create([FromBody] CreateMenuCommand command)
+        public Task<CommandDto> Create([FromBody] AddProductCommand command)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(CommandDto.NotFound());
         }
 
         [HttpPut]
-        public Task<UpdateMenuDto> Update([FromBody] UpdateMenuCommand command)
+        public Task<CommandDto> Update([FromBody] UpdateProductCommand command)
         {
             throw new NotImplementedException();
         }
 
         [HttpDelete]
-        public Task Delete([FromBody] DeleteMenuCommand command)
+        public Task<CommandDto> Delete([FromBody] DeleteProductCommand command)
         {
             throw new NotImplementedException();
         }
