@@ -1,4 +1,5 @@
 ﻿using Core.CoreDtos;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.MenuService
 {
@@ -19,6 +20,7 @@ namespace Application.MenuService
     {
         public string? Name { get; set; }
         public decimal? Price { get; set; }
+        public IFormFile? Image { get; set; }
     }
 
     public class UpdateProductCommand
@@ -26,6 +28,7 @@ namespace Application.MenuService
         public Guid? ProductId { get; set; }
         public string? Name { get; set; }
         public decimal? Price { get; set; }
+        public IFormFile? Image { get; set; }
     }
 
     public class DeleteProductCommand
