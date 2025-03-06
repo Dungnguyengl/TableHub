@@ -74,7 +74,7 @@ namespace Presentation.Controllers
                     {
                         Name = storeInfo.Name,
                         Address = storeInfo.Address,
-                        LogoLink = await _imageStorageService.StoreFileAsync(storeInfo.LogoImage)
+                        LogoLink = storeInfo.LogoImage != null ? await _imageStorageService.StoreFileAsync(storeInfo.LogoImage) : null
                     };
 
                     var u = await _userManager.FindByEmailAsync(command.Email);

@@ -20,7 +20,7 @@ namespace Application.StoreService
     {
         public string? Name { get; set; }
         public string? Address { get; set; }
-        public IFormFile LogoImage { get; set; }
+        public IFormFile? LogoImage { get; set; }
     }
 
     public class CreateStoreCommand
