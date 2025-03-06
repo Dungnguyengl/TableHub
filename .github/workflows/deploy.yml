@@ -1,0 +1,32 @@
+name: EC2 Docker deployment
+
+on: 
+  push:
+    branches:
+      - deploy/dev
+      - deploy/product
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to EC2
+        env: 
+          PRIVATE_KEY: ${{secrets.EC2_PRIVATE_KEY}}
+          USER: ${{secrets.EC2_USER}}
+          HOST: ${{secrets.EC2_HOST}}
+          BRANCH: ${{ github.ref_name }}  # This gets the branch name that triggered the workflow
+          REPO: ${{ github.event.repository.name }} # get repo's name that triggered the workflow
+        run: |
+          echo "$PRIVATE_KEY" > github-ec2.pem && chmod 600 github-ec2.pem
+          ssh -o StrictHostKeyChecking=no -i github-ec2.pem ${USER}@${HOST} "
+          cd TableHub
+          echo fetch source...
+          git fetch
+          git checkout -B $BRANCH --track origin/$BRANCH
+          echo running build compose...
+          sudo docker-compose build --no-cache
+          echo restarting app...
+          sudo docker-compose down
+          sudo docker-compose up -d
+          "
