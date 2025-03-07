@@ -107,6 +107,8 @@ namespace Presentation.Controllers
                         .FirstOrDefaultAsync(x => x.OrderCode == input.data.orderCode) ?? throw new("Payment not found!");
 
                     payment.Status = Core.Enum.PaymentStatus.Paid;
+                    payment.PaidAt = DateTime.Parse(input.data.transactionDateTime);
+                    payment.Reference = input.data.reference;
                     _context.Payments.Update(payment);
                     await _context.SaveChangesAsync();
 

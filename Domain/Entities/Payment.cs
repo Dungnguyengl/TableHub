@@ -19,5 +19,7 @@ namespace Domain.Entities
         public Guid? OrderId { get; set; }
 
         public Guid? StoreId { get; set; }
+
+        public DateTime? PaidAt { get; set; }
     }
 }
