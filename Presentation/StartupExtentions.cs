@@ -37,7 +37,7 @@ namespace Presentation
                     var result = await payOSService.confirmWebhook($"https://{baseUrl}/web-hooks/payment-info/");
                     logger.LogInformation("Registed to Webhook {result}", result);
                 }
-            }).Wait();
+            });
 
             return app;
         }
