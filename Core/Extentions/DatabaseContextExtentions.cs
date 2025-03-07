@@ -33,7 +33,7 @@ namespace Core.Extentions
         /// var newUserKey = _context.Users.CreateWithTracking(newUser);
         /// </code>
         /// </example>
-        public static Guid CreateWithTracking<TEntity>(this DbSet<TEntity> dbSet, TEntity entity, string? userid = null) where TEntity : EntityBase
+        public static Guid CreateWithTracking<TEntity>(this DbSet<TEntity> dbSet, TEntity entity, string? userid = "00000000-0000-0000-0000-000000000000") where TEntity : EntityBase
         {
             var httpContextAccessor = dbSet.GetService<IHttpContextAccessor>();
             var user = httpContextAccessor?.HttpContext?.User;
@@ -68,7 +68,7 @@ namespace Core.Extentions
         /// var newUserKeys = _context.Users.BulkCreateWithTracking(newUsers);
         /// </code>
         /// </example>
-        public static IEnumerable<Guid> BulkCreateWithTracking<TEntity>(this DbSet<TEntity> dbSet, IEnumerable<TEntity> entities, string? userid = null) where TEntity : EntityBase
+        public static IEnumerable<Guid> BulkCreateWithTracking<TEntity>(this DbSet<TEntity> dbSet, IEnumerable<TEntity> entities, string? userid = "00000000-0000-0000-0000-000000000000") where TEntity : EntityBase
         {
             var httpContextAccessor = dbSet.GetService<IHttpContextAccessor>();
             var user = httpContextAccessor?.HttpContext?.User;
@@ -112,12 +112,12 @@ namespace Core.Extentions
         /// _context.Users.UpdateWithTracking(existingUser);
         /// </code>
         /// </example>
-        public static void UpdateWithTracking<TEntity>(this DbSet<TEntity> dbSet, TEntity entity) where TEntity : EntityBase
+        public static void UpdateWithTracking<TEntity>(this DbSet<TEntity> dbSet, TEntity entity, string? userid = "00000000-0000-0000-0000-000000000000") where TEntity : EntityBase
         {
             var httpContextAccessor = dbSet.GetService<IHttpContextAccessor>();
             var user = httpContextAccessor?.HttpContext?.User;
 
-            if (Guid.TryParse(user?.FindFirst(ClaimTypes.Sid)?.Value, out var userId))
+            if (Guid.TryParse(user?.FindFirst(ClaimTypes.Sid)?.Value ?? userid, out var userId))
             {
                 entity.UpdDate = DateTime.Now;
                 entity.UpdUserCode = userId;
