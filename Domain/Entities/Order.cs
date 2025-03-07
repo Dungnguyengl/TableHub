@@ -9,5 +9,6 @@ namespace Domain.Entities
         public Guid? CustomerId { get; set; }
         public OrderStatus? Status { get; set; }
         public decimal? TotalPrice { get; set; }
+        public string? CheckinCode { get; set; }
     }
 }

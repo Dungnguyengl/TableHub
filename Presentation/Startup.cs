@@ -1,4 +1,5 @@
 ﻿using Core.Services.FileService;
+using Core.Services.MailService;
 using Core.Services.UserService;
 using Domain.Entities;
 using Infrastructure.Database;
@@ -30,6 +31,8 @@ namespace Presentation
 
             services.AddScoped<IImageStorageService, CloudinaryService>();
             services.AddScoped<IUserService, UserService>();
+
+            services.AddSingleton<IMailService, MailerSendService>();
 
             services.AddDbContext<TableHubDbContext>(options =>
             {

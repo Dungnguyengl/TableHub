@@ -73,12 +73,12 @@ namespace Presentation.Controllers
             product.Price = command.Price;
             var currentImageLink = product.ImageLink;
 
-            if (command.Image == null && currentImageLink != null)
-            {
-                await _imageStorageService.DeleteForeverAsync(currentImageLink);
-                product.ImageLink = null;
-            }
-            else if (command.Image != null)
+            //if (command.Image == null && currentImageLink != null)
+            //{
+            //    await _imageStorageService.DeleteForeverAsync(currentImageLink);
+            //    product.ImageLink = null;
+            //}
+            if (command.Image != null)
             {
                 product.ImageLink = currentImageLink != null
                     ? await _imageStorageService.ChangeImageAsync(currentImageLink, command.Image)

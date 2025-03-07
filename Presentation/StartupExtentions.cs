@@ -33,10 +33,11 @@ namespace Presentation
                 if (!baseUrl.IsNullOrEmpty())
                 {
                     logger.LogInformation("Registing to Webhook {baseUrl}...", baseUrl);
-                    await payOSService.confirmWebhook($"https://{baseUrl}/web-hooks/payment-info");
-                    logger.LogInformation("Registed to Webhook {baseUrl}", baseUrl);
+                    logger.LogInformation("https://{baseUrl}/web-hooks/payment-info", baseUrl);
+                    var result = await payOSService.confirmWebhook($"https://{baseUrl}/web-hooks/payment-info/");
+                    logger.LogInformation("Registed to Webhook {result}", result);
                 }
-            });
+            }).Wait();
 
             return app;
         }
