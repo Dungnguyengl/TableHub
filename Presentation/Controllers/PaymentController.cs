@@ -14,7 +14,8 @@ namespace Presentation.Controllers
         [HttpGet("payment-history")]
         public IEnumerable<PaymentHistoryDto> GetPaymentHistory([FromQuery] PaymentHistoryQuery query)
         {
-            var storeQuery = _context.Stores.TakeAvailable();
+            var storeQuery = _context.Stores.TakeAvailable()
+                .Where(x => !query.StoreId.HasValue || x.Key == query.StoreId);
 
             var paymentQuery = _context.Payments.AsNoTracking()
                 .Where(x => x.Status == Core.Enum.PaymentStatus.Paid)
