@@ -17,11 +17,11 @@ namespace Presentation.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    public class OrderController(TableHubDbContext context, PayOS payOS, UserService userService) : ControllerBase
+    public class OrderController(TableHubDbContext context, PayOS payOS, IUserService userService) : ControllerBase
     {
         private readonly TableHubDbContext _context = context;
         private readonly PayOS _payOS = payOS;
-        private readonly UserService _userService = userService;
+        private readonly IUserService _userService = userService;
 
         [HttpGet]
         public async Task<PaggingResultDto<SearchOrderDto>> SearchOrderItem([FromQuery] SearchOrderQuery query)
