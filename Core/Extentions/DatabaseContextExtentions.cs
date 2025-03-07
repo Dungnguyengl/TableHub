@@ -68,14 +68,14 @@ namespace Core.Extentions
         /// var newUserKeys = _context.Users.BulkCreateWithTracking(newUsers);
         /// </code>
         /// </example>
-        public static IEnumerable<Guid> BulkCreateWithTracking<TEntity>(this DbSet<TEntity> dbSet, IEnumerable<TEntity> entities) where TEntity : EntityBase
+        public static IEnumerable<Guid> BulkCreateWithTracking<TEntity>(this DbSet<TEntity> dbSet, IEnumerable<TEntity> entities, string? userid = null) where TEntity : EntityBase
         {
             var httpContextAccessor = dbSet.GetService<IHttpContextAccessor>();
             var user = httpContextAccessor?.HttpContext?.User;
 
             var now = DateTime.Now;
 
-            if (Guid.TryParse(user?.FindFirst(ClaimTypes.Sid)?.Value, out var userId))
+            if (Guid.TryParse(user?.FindFirst(ClaimTypes.Sid)?.Value ?? userid, out var userId))
             {
                 foreach (var entity in entities)
                 {
