@@ -8,8 +8,8 @@ namespace Presentation.Controllers
     {
         private readonly ILogger<WebHook> _logger = logger;
 
-        [HttpGet("payment-info")]
-        public IActionResult PaymentInfo(WebhookType input)
+        [HttpPost("payment-info")]
+        public IActionResult PaymentInfo([FromBody] WebhookType input)
         {
             _logger.LogInformation("Received input: {@Input}", input);
             return Ok(new { Success = true });
