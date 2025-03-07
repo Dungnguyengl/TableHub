@@ -32,7 +32,13 @@ namespace Presentation
             services.AddScoped<IUserService, UserService>();
 
             services.AddDbContext<TableHubDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), sqlops =>
+                {
+                    //sqlops.EnableRetryOnFailure(3, TimeSpan.FromSeconds(30), null);
+                    sqlops.MigrationsAssembly(typeof(TableHubDbContext).Assembly.GetName().Name);
+                });
+            });
 
             services.AddIdentity<User, IdentityRole>(cfg =>
             {

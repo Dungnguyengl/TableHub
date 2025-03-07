@@ -69,7 +69,7 @@ namespace Presentation.Controllers
 
                 if (command.IsOwner)
                 {
-                    var storeInfo = command.StoreInfo;
+                    var storeInfo = command.StoreInfo ?? throw new Exception("Store Info not found!");
                     var store = new Store
                     {
                         Name = storeInfo.Name,
@@ -83,6 +83,21 @@ namespace Presentation.Controllers
                     user.StoreId = storeId;
 
                     await _userManager.UpdateAsync(user);
+                    await _context.SaveChangesAsync();
+
+                    // Hard code create 26 table for store
+                    var tables = new List<Table>(26);
+                    for (int i = 0; i < 26; i++)
+                    {
+                        tables.Add(new()
+                        {
+                            Name = $"{storeInfo.Name} - Table {i + 1}",
+                            Status = TableStatus.Available,
+                            StoreId = storeId,
+                        });
+                    }
+
+                    _context.Tables.BulkCreateWithTracking(tables, u?.Id);
                     await _context.SaveChangesAsync();
                 }
                 await transaction.CommitAsync();

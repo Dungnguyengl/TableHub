@@ -4,12 +4,15 @@ using Net.payOS.Types;
 namespace Presentation.Controllers
 {
     [Route("/web-hooks")]
-    public class WebHook : ControllerBase
+    public class WebHook(ILogger<WebHook> logger) : ControllerBase
     {
+        private readonly ILogger<WebHook> _logger = logger;
+
         [HttpGet("payment-info")]
-        public WebhookData PaymentInfo(WebhookType input)
+        public IActionResult PaymentInfo(WebhookType input)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation("Received input: {@Input}", input);
+            return Ok(new { Success = true });
         }
     }
 }

@@ -22,6 +22,7 @@ namespace Presentation.Controllers
             var result = await _context.Tables.AsNoTracking()
                 .TakeByStore(User, query.StoreId)
                 .TakeAvailable()
+                .OrderBy(x => x.Name)
                 .Pagging(query, out var total)
                 .Select(x => new SearchTableDto
                 {
