@@ -16,7 +16,7 @@ namespace Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class OrderController(TableHubDbContext context, PayOS payOS, IUserService userService) : ControllerBase
     {
         private readonly TableHubDbContext _context = context;
@@ -145,15 +145,14 @@ namespace Presentation.Controllers
                         var items = orderItems.Select(x => new ItemData(x.ProductName, (int) x.Quantity, (int) x.UnitPrice))
                             .ToList();
 
-                        var expiredTime = DateTimeOffset.Now.AddMinutes(10).ToUnixTimeSeconds();
+                        var expiredTime = DateTimeOffset.Now.AddHours(1).ToUnixTimeSeconds();
 
                         var res = await _payOS.createPaymentLink(new(paymentData.OrderCode,
                                                                      (int) paymentData.Amount,
                                                                      paymentData.Description,
                                                                      items,
                                                                      command.CancelUrl,
-                                                                     command.ReturnUrl,
-                                                                     expiredAt: expiredTime));
+                                                                     command.ReturnUrl));
                         await paymentTransaction.CommitAsync();
 
                         return new CreateOrderDto
