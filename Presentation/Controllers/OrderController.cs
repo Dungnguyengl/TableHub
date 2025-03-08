@@ -29,6 +29,7 @@ namespace Presentation.Controllers
             var orders = await _context.Orders.AsNoTracking()
                 .TakeByStore(User, query.StoreId)
                 .TakeAvailable()
+                .Where(x => x.Status == OrderStatus.Completed || x.Status == OrderStatus.Paid)
                 .Pagging(query, out var total)
                 .ToListAsync();
 
