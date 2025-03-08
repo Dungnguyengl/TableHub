@@ -3,6 +3,7 @@ using Core.CoreDtos;
 using Core.Enum;
 using Core.Extentions;
 using Core.Services.UserService;
+using Domain.Constants;
 using Domain.Entities;
 using Infrastructure.Database;
 using Microsoft.AspNetCore.Authorization;
@@ -36,32 +37,46 @@ namespace Presentation.Controllers
             var orderIds = orders.Select(x => x.Key)
                 .ToList();
 
+            var guestQuery = _context.Users.AsNoTracking()
+                .Where(x => x.Role == Roles.GUEST)
+                .Select(x => new
+                {
+                    Id = x.Id,
+                    Name = x.FirstName + x.LastName,
+                });
+
+            var tableQuery = _context.Tables.TakeAvailable();
+
             var orderItems = await _context.OrderItems.AsNoTracking()
                 .TakeAvailable()
                 .Where(x => orderIds.Contains(x.OrderId.Value))
                 .ToListAsync();
 
-            var result = orders.Select(x => new SearchOrderDto
-            {
-                OrderId = x.Key,
-                CustommerName = x.CustomerId.ToString(),
-                TotalPrice = x.TotalPrice,
-                Status = x.Status,
-                Items = orderItems.Where(item => item.OrderId == x.Key)
-                .Select(x => new SearchOrderItemDto
-                {
-                    ItemName = x.ProductName,
-                    Quantity = x.Quantity
-                })
-                .AsEnumerable()
-            });
+            var resultQuery = from order in orders
+                              join guest in guestQuery on order.CustomerId.ToString().ToLower() equals guest.Id
+                              join table in tableQuery on order.TableId equals table.Key
+                              select new SearchOrderDto
+                              {
+                                  OrderId = order.Key,
+                                  CustommerName = guest.Name,
+                                  TotalPrice = order.TotalPrice,
+                                  Status = order.Status,
+                                  TableName = table.Name,
+                                  Items = orderItems.Where(item => item.OrderId == order.Key)
+                                        .Select(x => new SearchOrderItemDto
+                                        {
+                                            ItemName = x.ProductName,
+                                            Quantity = x.Quantity
+                                        })
+                                        .AsEnumerable()
+                              };
 
             return new PaggingResultDto<SearchOrderDto>
             {
                 Total = total,
                 PageSize = query.PageSize,
                 Sequence = query.Sequence,
-                Results = result.ToList()
+                Results = resultQuery.ToList()
             };
         }
 
@@ -221,7 +236,8 @@ namespace Presentation.Controllers
                     TableName = table.Name,
                     Items = orderItem
                 };
-            } catch
+            }
+            catch
             {
                 await transaction.RollbackAsync();
                 throw;

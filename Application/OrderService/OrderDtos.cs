@@ -14,6 +14,7 @@ namespace Application.OrderService
         public string? CustommerName { get; set; }
         public OrderStatus? Status { get; set; }
         public decimal? TotalPrice { get; set; }
+        public string? TableName { get; set; }
         public IEnumerable<SearchOrderItemDto>? Items { get; set; }
     }
 
