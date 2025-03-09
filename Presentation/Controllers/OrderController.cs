@@ -42,7 +42,7 @@ namespace Presentation.Controllers
                 .Select(x => new
                 {
                     Id = x.Id,
-                    Name = x.FirstName + x.LastName,
+                    Name = $"{x.LastName} {x.FirstName}",
                 });
 
             var tableQuery = _context.Tables.TakeAvailable();
@@ -198,7 +198,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost("checkin")]
-        public async Task<CheckinDto> UpdateOrder([FromBody] CheckinCommand command)
+        public async Task<CheckinDto> Checkin([FromBody] CheckinCommand command)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
 
@@ -215,6 +215,8 @@ namespace Presentation.Controllers
 
                 var table = await _context.Tables.TakeAvailable()
                     .FirstOrDefaultAsync(x => x.Key == order.TableId) ?? throw new("Table not found!");
+
+                var guest = await _context.Users.FirstOrDefaultAsync(x => x.Id == order.CustomerId.ToString().ToLower());
 
                 table.Status = TableStatus.Busy;
                 _context.Tables.UpdateWithTracking(table);
@@ -234,6 +236,7 @@ namespace Presentation.Controllers
                 return new()
                 {
                     TableName = table.Name,
+                    CustomerName = guest != null ? $"{guest.LastName} {guest.FirstName}" : null,
                     Items = orderItem
                 };
             }
