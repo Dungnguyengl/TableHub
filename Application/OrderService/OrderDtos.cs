@@ -55,6 +55,7 @@ namespace Application.OrderService
     public class CheckinDto
     {
         public string? TableName { get; set; }
+        public string? CustomerName { get; set; }
         public IEnumerable<CheckinOrderItemDto> Items { get; set; }
     }
 
