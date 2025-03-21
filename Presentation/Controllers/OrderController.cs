@@ -132,7 +132,6 @@ namespace Presentation.Controllers
                 _context.OrderItems.BulkCreateWithTracking(orderItems);
 
                 await _context.SaveChangesAsync();
-                await orderTransaction.CommitAsync();
 
                 if (command.IsOnlinePayment)
                 {
@@ -184,6 +183,7 @@ namespace Presentation.Controllers
                         throw;
                     }
                 }
+                await orderTransaction.CommitAsync();
 
                 return new CreateOrderDto
                 {
