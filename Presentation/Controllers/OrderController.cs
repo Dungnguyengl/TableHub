@@ -135,7 +135,6 @@ namespace Presentation.Controllers
 
                 if (command.IsOnlinePayment)
                 {
-                    using var paymentTransaction = await _context.Database.BeginTransactionAsync();
                     try
                     {
                         var store = await _context.Stores.TakeAvailable()
@@ -168,7 +167,6 @@ namespace Presentation.Controllers
                                                                      items,
                                                                      command.CancelUrl,
                                                                      command.ReturnUrl));
-                        await paymentTransaction.CommitAsync();
 
                         return new CreateOrderDto
                         {
@@ -179,7 +177,6 @@ namespace Presentation.Controllers
                     }
                     catch
                     {
-                        await paymentTransaction.RollbackAsync();
                         throw;
                     }
                 }
