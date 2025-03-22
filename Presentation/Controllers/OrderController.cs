@@ -143,7 +143,7 @@ namespace Presentation.Controllers
                         var payment = new Payment
                         {
                             Amount = totalAmount,
-                            Description = $"{store.Name} - {totalAmount}",
+                            Description = $"TableHub - {totalAmount}",
                             Status = PaymentStatus.Processing,
                             OrderId = orderId,
                             StoreId = command.StoreId
@@ -168,6 +168,7 @@ namespace Presentation.Controllers
                                                                      command.CancelUrl,
                                                                      command.ReturnUrl));
 
+                        await orderTransaction.CommitAsync();
                         return new CreateOrderDto
                         {
                             OrderId = orderId,
