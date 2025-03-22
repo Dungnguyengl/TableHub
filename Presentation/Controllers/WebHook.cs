@@ -140,7 +140,7 @@ namespace Presentation.Controllers
                 {
                     _logger.LogError(ex, "Exeption when handle payment Success");
                     await transaction.RollbackAsync();
-                    return StatusCode(500);
+                    return Ok(new { Success = true });
                 }
             }
             return Ok(new { Success = true });
