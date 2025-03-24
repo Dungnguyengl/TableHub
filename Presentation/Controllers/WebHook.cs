@@ -5,6 +5,7 @@ using Infrastructure.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Net.payOS.Types;
+using System.Net.Mail;
 
 namespace Presentation.Controllers
 {
@@ -138,6 +139,12 @@ namespace Presentation.Controllers
                 }
                 catch(Exception ex)
                 {
+                    if (ex is SmtpException)
+                    {
+                        _logger.LogError(ex, "Exeption when handle payment Success");
+                        await transaction.CommitAsync();
+                        return Ok(new { Success = true });
+                    }
                     _logger.LogError(ex, "Exeption when handle payment Success");
                     await transaction.RollbackAsync();
                     return Ok(new { Success = true });
